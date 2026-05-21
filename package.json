@@ -1,0 +1,16 @@
+{
+  "name": "claude-code-zh-pack",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Enhanced Simplified Chinese localization keyword pack for Claude Code on Windows.",
+  "license": "MIT",
+  "scripts": {
+    "check": "node --check apply-localization.js"
+  },
+  "keywords": [
+    "claude-code",
+    "localization",
+    "zh-CN",
+    "windows"
+  ]
+}
