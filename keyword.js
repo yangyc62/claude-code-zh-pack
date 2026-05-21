@@ -817,4 +817,13 @@ module.exports = {
   'Version locks': '版本锁定',
   ' stale lock(s)': ' 个过期锁',
   'Agent parse errors': 'Agent 解析错误',
+
+  // ========== 新增：工作区信任提示 ==========
+  'Accessing workspace:': '正在访问工作区：',
+  'Quick safety check: Is this a project you created or one you trust? (Like your own code, a well-known open source project, or work from your team). If not, take a moment to review what': '快速安全检查：这是你创建或信任的项目吗？（例如你自己的代码、知名开源项目或团队工作内容。）如果不是，请先花点时间检查此文件夹里有什',
+  's in this folder first.': '么。',
+  'll be able to read, edit, and execute files here.': ' 将能够在这里读取、编辑和执行文件。',
+  'Security guide': '安全指南',
+  'Yes, I trust this folder': '是，我信任此文件夹',
+  'No, exit': '否，退出',
 }
