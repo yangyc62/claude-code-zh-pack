@@ -34,6 +34,11 @@ import('tweakcc').then(async (m) => {
     'System diagnostics',
     'MCP Config Diagnostics',
     'Extra usage is required for 1M context',
+    'Accessing workspace:',
+    'Quick safety check: Is this a project you created or one you trust?',
+    'Yes, I trust this folder',
+    'eH,{chord:"enter",action:"confirm"}',
+    'eH,{chord:"escape",action:"cancel"}',
   ];
   let failed = 0;
   for (const q of checks) {

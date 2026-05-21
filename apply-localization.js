@@ -24,6 +24,48 @@ const targetClaudeDir = process.env.CLAUDE_DIR || path.join(path.dirname(path.di
 const packKeyword = path.join(__dirname, 'keyword.js');
 const repoKeyword = path.join(repoDir, 'localize', 'keyword.js');
 
+const postPatchReplacements = [
+  [
+    'gc8.default.createElement(MY,null,"(",w," to ",K,")")',
+    'gc8.default.createElement(MY,null,"(",w," ",K,")")',
+  ],
+  [
+    'gc8.default.createElement(MY,null,w," to ",K)',
+    'gc8.default.createElement(MY,null,w," ",K)',
+  ],
+  [
+    'eH,{chord:"enter",action:"confirm"}',
+    'eH,{chord:"enter",action:"确认"}',
+  ],
+  [
+    'eH,{chord:"escape",action:"cancel"}',
+    'eH,{chord:"escape",action:"取消"}',
+  ],
+];
+
+async function applyPostPatch(installation) {
+  const tweakcc = await import('tweakcc');
+  if (typeof tweakcc.readContent !== 'function' || typeof tweakcc.writeContent !== 'function') {
+    return { replacements: 0 };
+  }
+
+  let content = await tweakcc.readContent(installation);
+  let replacements = 0;
+  for (const [source, target] of postPatchReplacements) {
+    const count = content.split(source).length - 1;
+    if (count > 0) {
+      content = content.split(source).join(target);
+      replacements += count;
+    }
+  }
+
+  if (replacements > 0) {
+    await tweakcc.writeContent(installation, content);
+  }
+
+  return { replacements };
+}
+
 async function main() {
   if (!fs.existsSync(targetExe)) throw new Error(`Claude executable not found: ${targetExe}`);
   if (!fs.existsSync(repoDir)) throw new Error(`cccn repo not found: ${repoDir}`);
@@ -34,11 +76,13 @@ async function main() {
   const { patchCli } = require(path.join(repoDir, 'src', 'installer'));
   const installation = { kind: 'native', path: targetExe, version: process.env.CLAUDE_VERSION || '2.1.126' };
   const result = await patchCli({ claudeDir: targetClaudeDir, installDir: repoDir, installation }, installation);
+  const postPatch = await applyPostPatch(installation);
 
   console.log(JSON.stringify({
     targetExe,
     matchedEntries: result.report.matchedEntries,
     replacements: result.report.replacements,
+    postPatchReplacements: postPatch.replacements,
     hashChanged: result.originalHash !== result.patchedHash,
   }, null, 2));
 }
