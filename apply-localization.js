@@ -10,6 +10,7 @@ function findClaudeExe() {
   if (explicit) return explicit;
 
   const bundled = firstExisting([
+    path.join(process.env.USERPROFILE || '', '.local', 'bin', 'claude.exe'),
     'D:\\ClaudeCode\\bin\\claude.exe',
     path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Claude Code', 'claude.exe'),
   ]);
@@ -32,14 +33,6 @@ const postPatchReplacements = [
   [
     'gc8.default.createElement(MY,null,w," to ",K)',
     'gc8.default.createElement(MY,null,w," ",K)',
-  ],
-  [
-    'eH,{chord:"enter",action:"confirm"}',
-    'eH,{chord:"enter",action:"确认"}',
-  ],
-  [
-    'eH,{chord:"escape",action:"cancel"}',
-    'eH,{chord:"escape",action:"取消"}',
   ],
 ];
 

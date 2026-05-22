@@ -7,7 +7,9 @@ param(
 $ErrorActionPreference = "Stop"
 
 if ([string]::IsNullOrWhiteSpace($ClaudeExe)) {
-  if (Test-Path -LiteralPath "D:\ClaudeCode\bin\claude.exe") {
+  if (Test-Path -LiteralPath "$env:USERPROFILE\.local\bin\claude.exe") {
+    $ClaudeExe = "$env:USERPROFILE\.local\bin\claude.exe"
+  } elseif (Test-Path -LiteralPath "D:\ClaudeCode\bin\claude.exe") {
     $ClaudeExe = "D:\ClaudeCode\bin\claude.exe"
   } else {
     $candidate = (Get-Command claude -ErrorAction SilentlyContinue | Select-Object -First 1).Source

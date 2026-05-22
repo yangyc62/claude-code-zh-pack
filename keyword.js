@@ -826,4 +826,13 @@ module.exports = {
   'Security guide': '安全指南',
   'Yes, I trust this folder': '是，我信任此文件夹',
   'No, exit': '否，退出',
+
+  // ========== 新增：首次启动安全说明 ==========
+  'Security notes:': '安全说明：',
+  'Claude can make mistakes': 'Claude 可能会出错',
+  "You should always review Claude's responses, especially when": '你应始终检查 Claude 的回复，尤其是在',
+  'running code.': '运行代码时。',
+  'Due to prompt injection risks, only use it with code you trust': '由于存在提示注入风险，请只在你信任的代码中使用它',
+  'Press ': '按 ',
+  ' to continue\\u2026': ' 继续...',
 }

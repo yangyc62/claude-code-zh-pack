@@ -1,7 +1,7 @@
 $ErrorActionPreference = "Stop"
 
 [string]$repo = if ($env:CCCN_DIR) { $env:CCCN_DIR } else { "$env:USERPROFILE\.claude-code-cn-plus" }
-[string]$claudeExe = if ($env:CLAUDE_EXE) { $env:CLAUDE_EXE } elseif (Test-Path -LiteralPath "D:\ClaudeCode\bin\claude.exe") { "D:\ClaudeCode\bin\claude.exe" } else { (Get-Command claude -ErrorAction SilentlyContinue | Select-Object -First 1).Source }
+[string]$claudeExe = if ($env:CLAUDE_EXE) { $env:CLAUDE_EXE } elseif (Test-Path -LiteralPath "$env:USERPROFILE\.local\bin\claude.exe") { "$env:USERPROFILE\.local\bin\claude.exe" } elseif (Test-Path -LiteralPath "D:\ClaudeCode\bin\claude.exe") { "D:\ClaudeCode\bin\claude.exe" } else { (Get-Command claude -ErrorAction SilentlyContinue | Select-Object -First 1).Source }
 
 if (-not (Test-Path -LiteralPath $repo)) {
   throw "claude-code-cn-plus not found: $repo"
@@ -37,8 +37,10 @@ import('tweakcc').then(async (m) => {
     'Accessing workspace:',
     'Quick safety check: Is this a project you created or one you trust?',
     'Yes, I trust this folder',
-    'eH,{chord:"enter",action:"confirm"}',
-    'eH,{chord:"escape",action:"cancel"}',
+    'Security notes:',
+    'Claude can make mistakes',
+    "You should always review Claude's responses",
+    'Due to prompt injection risks',
   ];
   let failed = 0;
   for (const q of checks) {
