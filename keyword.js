@@ -83,6 +83,8 @@ module.exports = {
   'Access key + secret': '访问密钥 + 密钥',
   'Use credentials already in my environment': '使用当前环境中已有的凭证',
   'Press Enter or Esc to go back': '按 Enter 或 Esc 返回',
+  '? for shortcuts': '? 查看快捷键',
+  'for shortcuts': '查看快捷键',
   'Press ': '按 ',
   ' to restart Claude Code.': ' 重启 Claude Code。',
   'Opening browser to sign in…': '正在打开浏览器进行登录…',

@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const { pathToFileURL } = require('url');
 
 function firstExisting(paths) {
   return paths.find((item) => item && fs.existsSync(item));
@@ -36,6 +37,18 @@ const repoKeyword = path.join(repoDir, 'localize', 'keyword.js');
 
 const postPatchReplacements = [
   [
+    '? for shortcuts',
+    '? 查看快捷键',
+  ],
+  [
+    'Auto mode lets Claude handle permission prompts automatically — Claude checks each tool call for risky actions and prompt injection before executing. Actions Claude identifies as safe are executed, while actions Claude identifies as risky are blocked and Claude may try a different approach. Ideal for long-running tasks. Sessions are slightly more expensive. Claude can make mistakes that allow harmful commands to run, it\'s recommended to only use in isolated environments. Shift+Tab to change mode.',
+    '自动模式会让 Claude 自动处理权限提示：Claude 会在执行前检查每个工具调用是否包含风险操作和提示注入。Claude 认为安全的操作会被执行，认为有风险的操作会被阻止，并可能尝试其他方式。适合长时间运行的任务。会话费用会略高。Claude 也可能判断失误，导致有害命令运行，因此建议只在隔离环境中使用。可按 Shift+Tab 切换模式。',
+  ],
+  [
+    'Claude can make mistakes that allow harmful commands to run, it\'s recommended to only use in isolated environments. Shift+Tab to change mode.',
+    'Claude 也可能判断失误，导致有害命令运行，因此建议只在隔离环境中使用。可按 Shift+Tab 切换模式。',
+  ],
+  [
     'gc8.default.createElement(MY,null,"(",w," to ",K,")")',
     'gc8.default.createElement(MY,null,"(",w," ",K,")")',
   ],
@@ -46,7 +59,10 @@ const postPatchReplacements = [
 ];
 
 async function applyPostPatch(installation) {
-  const tweakcc = await import('tweakcc');
+  const tweakccPackage = path.join(repoDir, 'node_modules', 'tweakcc', 'package.json');
+  const tweakccMain = JSON.parse(fs.readFileSync(tweakccPackage, 'utf8')).main;
+  const tweakccPath = path.join(path.dirname(tweakccPackage), tweakccMain);
+  const tweakcc = await import(pathToFileURL(tweakccPath).href);
   if (typeof tweakcc.readContent !== 'function' || typeof tweakcc.writeContent !== 'function') {
     return { replacements: 0 };
   }
