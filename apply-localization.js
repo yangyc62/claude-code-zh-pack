@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 function firstExisting(paths) {
   return paths.find((item) => item && fs.existsSync(item));
@@ -11,12 +12,20 @@ function findClaudeExe() {
 
   const bundled = firstExisting([
     path.join(process.env.USERPROFILE || '', '.local', 'bin', 'claude.exe'),
-    'D:\\ClaudeCode\\bin\\claude.exe',
     path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Claude Code', 'claude.exe'),
   ]);
   if (bundled) return bundled;
 
   throw new Error('Claude executable not found. Set CLAUDE_EXE to the full path of claude.exe.');
+}
+
+function detectClaudeVersion(exePath) {
+  if (process.env.CLAUDE_VERSION) return process.env.CLAUDE_VERSION;
+
+  const output = execFileSync(exePath, ['--version'], { encoding: 'utf8' }).trim();
+  const match = output.match(/^(\d+\.\d+\.\d+)/);
+  if (!match) throw new Error(`Unable to parse Claude version from: ${output}`);
+  return match[1];
 }
 
 const repoDir = process.env.CCCN_DIR || path.join(process.env.USERPROFILE || '', '.claude-code-cn-plus');
@@ -67,12 +76,13 @@ async function main() {
   fs.copyFileSync(packKeyword, repoKeyword);
 
   const { patchCli } = require(path.join(repoDir, 'src', 'installer'));
-  const installation = { kind: 'native', path: targetExe, version: process.env.CLAUDE_VERSION || '2.1.126' };
+  const installation = { kind: 'native', path: targetExe, version: detectClaudeVersion(targetExe) };
   const result = await patchCli({ claudeDir: targetClaudeDir, installDir: repoDir, installation }, installation);
   const postPatch = await applyPostPatch(installation);
 
   console.log(JSON.stringify({
     targetExe,
+    version: installation.version,
     matchedEntries: result.report.matchedEntries,
     replacements: result.report.replacements,
     postPatchReplacements: postPatch.replacements,

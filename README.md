@@ -2,7 +2,7 @@
 
 这是一个面向 Windows 版 Claude Code 的简体中文汉化资源包，基于 [Gdenian/claude-code-cn-plus](https://github.com/Gdenian/claude-code-cn-plus) 的补丁引擎整理。
 
-本仓库不替代 `claude-code-cn-plus`，而是提供一份增强后的 `keyword.js` 词库和一键安装脚本。当前词库针对 `Claude Code 2.1.126` 做了可见页面补充，覆盖登录、AWS Bedrock、Google Vertex AI、模型固定、设置、状态、MCP、权限、反馈、统计、Teleport、extra usage、后台任务等常见界面分支。
+本仓库不替代 `claude-code-cn-plus`，而是提供一份增强后的 `keyword.js` 词库和一键安装脚本。当前词库会随安装脚本自动识别本机 Claude Code 版本，并对可见页面做补充，覆盖登录、AWS Bedrock、Google Vertex AI、模型固定、设置、状态、MCP、权限、反馈、统计、Teleport、extra usage、后台任务等常见界面分支。
 
 ## 工作原理
 
@@ -38,16 +38,15 @@ cd claude-code-zh-pack
 
 默认会优先查找：
 
-- `D:\ClaudeCode\bin\claude.exe`
+- `$env:USERPROFILE\.local\bin\claude.exe`
 - PATH 中的 `claude`
 
 如果你的路径不同，可以手动指定：
 
 ```powershell
 .\install.ps1 `
-  -ClaudeExe "D:\ClaudeCode\bin\claude.exe" `
-  -CccnDir "$env:USERPROFILE\.claude-code-cn-plus" `
-  -ClaudeVersion "2.1.126"
+  -ClaudeExe "$env:USERPROFILE\.local\bin\claude.exe" `
+  -CccnDir "$env:USERPROFILE\.claude-code-cn-plus"
 ```
 
 脚本会自动结束正在占用目标 `claude.exe` 的旧 `claude` 进程，然后重新打补丁。
